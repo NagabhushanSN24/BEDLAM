@@ -29,6 +29,24 @@ source bedlam_venv/bin/activate
 pip install -r requirements.txt
 ```
 
+If you get an error saying cuda is not available or pytorch is not compiled with cuda, run the following command
+```shell
+conda install pytorch=2.1 torchvision pytorch-cuda=11.8 -c pytorch -c nvidia
+```
+
+If you get an error saying `numpy` has no attribute `bool`, install a previous version of `numpy`
+```shell
+pip3 install mxnet-mkl==1.6.0 numpy==1.23.1
+```
+
+Set OPENGL Platform to OS Mesa
+```shell
+export PYOPENGL_PLATFORM='osmesa'
+```
+
+### Getting Pyrender Working with OSMesa
+Follow the instruction here: [link](https://pyrender.readthedocs.io/en/latest/install/index.html#osmesa) 
+
 ## Quick Demo
 
 
@@ -56,6 +74,15 @@ bash fetch_demo_data.sh
 ### BEDLAM-CLIFF-X demo
 ```
 python demox.py --cfg configs/demo_bedlam_cliff_x.yaml --display
+```
+
+### Running on videos
+```python
+python demo_videos.py \
+       --videos_dirpath ../../../../../databases/spree_internal/data/rgb_png \
+       --output_dirpath ../runs/testing/test0000 \
+       --demo_file_name demox  \
+       --display
 ```
 
 ## Dataset visualization

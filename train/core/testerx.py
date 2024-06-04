@@ -5,6 +5,7 @@ import torch
 import joblib
 import tqdm
 import numpy as np
+from pathlib import Path
 from loguru import logger
 from yolov3.yolo import YOLOv3
 from multi_person_tracker import MPT
@@ -329,13 +330,14 @@ class Tester:
                                                             bg_img_rgb=img.copy())
 
                     # save rendering results
-                    basename = img_fname.split('/')[-1]
+                    # basename = img_fname.split('/')[-1]
+                    basename = Path(img_fname).stem
                     filename = basename + "pred_%s.jpg" % 'bedlam'
                     filename_orig = basename + "orig_%s.jpg" % 'bedlam'
                     front_view_path = os.path.join(output_folder, filename)
                     orig_path = os.path.join(output_folder, filename_orig)
                     logger.info(f'Writing output files to {output_folder}')
                     cv2.imwrite(front_view_path, front_view[:, :, ::-1])
-                    cv2.imwrite(orig_path, img[:, :, ::-1])
+                    # cv2.imwrite(orig_path, img[:, :, ::-1])
 
                     renderer.delete()
