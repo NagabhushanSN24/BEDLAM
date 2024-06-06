@@ -37,31 +37,23 @@ def extract_frames(video_path: Path, frames_dirpath: Path):
     return
 
 
-def merge_frames(video_name, frames_dirpath: Path, output_dirpath: Path, frame_rate: int = 60, copy_frames: bool = False):
+def merge_frames(video_name, output_dirpath: Path, frame_rate: int = 60):
+    frames_dirpath = output_dirpath / f'{video_name}/frames'
     output_filepath = output_dirpath / f'{video_name}/{video_name}.mp4'
     output_filepath.parent.mkdir(parents=True, exist_ok=True)
     cmd = f'ffmpeg -r {frame_rate} -pattern_type glob -i "{frames_dirpath.as_posix()}/*pred_bedlam.jpg" -c:v libx264 -pix_fmt yuv420p {output_filepath.as_posix()}'
     execute_shell_command(cmd)
-
-    if copy_frames:
-        output_frames_dirpath = output_dirpath / f'{video_name}/frames'
-        output_frames_dirpath.mkdir(parents=True, exist_ok=True)
-        for src_frame_path in tqdm(sorted(frames_dirpath.glob('*pred_bedlam.jpg')), desc='Copying individual frames'):
-            frame_num = int(src_frame_path.stem[:4])
-            tgt_frame_path = output_frames_dirpath / f'{frame_num:04}.jpg'
-            shutil.copy(src_frame_path, tgt_frame_path)
     return
 
 
 def main():
     args = parse_args()
-    tmp_dirpath = Path('../tmp')
-    # clean_directory(tmp_dirpath)
 
     videos_dirpath = Path(args.videos_dirpath)
+    output_dirpath = Path(args.output_folder)
     for video_frames_dirpath in sorted(videos_dirpath.iterdir()):
         video_name = video_frames_dirpath.stem
-        frames_output_dirpath = tmp_dirpath / f'{video_name}_outputs'
+        frames_output_dirpath = output_dirpath / f'{video_name}/frames'
         demo_args = SimpleNamespace(cfg=args.cfg,
                                     ckpt=args.ckpt,
                                     image_folder=video_frames_dirpath.as_posix(),
@@ -83,8 +75,7 @@ def main():
             demox_main(demo_args)
         else:
             raise RuntimeError(f'Unknown demo file: {args.demo_file_name}')
-        merge_frames(video_name, frames_output_dirpath, Path(args.output_folder), copy_frames=True)
-    # delete_directory(tmp_dirpath)
+        merge_frames(video_name, output_dirpath)
     return
 
 

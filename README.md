@@ -80,7 +80,7 @@ python demox.py --cfg configs/demo_bedlam_cliff_x.yaml --display
 ```python
 python demo_videos.py \
        --videos_dirpath ../../../../../databases/spree_internal/data/rgb_png \
-       --output_dirpath ../runs/testing/test0000 \
+       --output_dirpath ../runs/testing/test0001 \
        --demo_file_name demox  \
        --display
 ```
