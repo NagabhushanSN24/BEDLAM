@@ -88,7 +88,7 @@ def parse_args():
                         help='checkpoint path')
 
     parser.add_argument('--videos_dirpath', type=str,
-                        default='../../../../../databases/spree_internal/data/rgb_png',
+                        default='../../../../../databases/Spree01/data/rgb_png',
                         help='input video frames folder')
 
     parser.add_argument('--output_dirpath', type=str,
